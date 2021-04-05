@@ -80,4 +80,13 @@ public class TFTPUtilsModeTest {
 		assertEquals(Mode.UNKNOWN, TFTPUtils.getMode(packet, filename));
 	}
 
+	@Test
+	void getMode_shouldReturnUnknown_whenFilenameIsNull() {
+		assertEquals(Mode.UNKNOWN, TFTPUtils.getMode(packet, null));
+	}
+
+	@Test
+	void getMode_shouldReturnUnknown_whenFilenameIsEmpty() {
+		assertEquals(Mode.UNKNOWN, TFTPUtils.getMode(packet, ""));
+	}
 }
