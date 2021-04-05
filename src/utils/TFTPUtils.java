@@ -1,5 +1,4 @@
 package utils;
-import java.net.DatagramPacket;
 
 public class TFTPUtils {
 	private static final int PACKET_MIN_LENGTH = 4;
@@ -34,6 +33,29 @@ public class TFTPUtils {
 		}
 		return code;
 	}
+	
+	public static Mode getMode(byte[] data, String filename) {
+		Mode code = Mode.UNKNOWN;
+		if (!TFTPUtils.isValid(data) || filename == null || filename.length() == 0) {
+			return Mode.UNKNOWN;
+		} else if(isReadRequest(data) || isWriteRequest(data)){
+			switch (getTransferModeString(data, filename).toLowerCase()) {
+				case "netascii":
+					code = Mode.NETASCII;
+					break;
+				case "octet":
+					code = Mode.OCTET;
+					break;
+				case "mail":
+					code = Mode.MAIL;
+					break;
+				default:
+					code = Mode.UNKNOWN;
+					break;
+			}
+		}
+		return code;
+	}
 
 	private static boolean isValid(byte[] data) {
 		if (data == null) {
@@ -47,12 +69,28 @@ public class TFTPUtils {
 	}
 
 	public static String getFileName(byte[] data) {
-		StringBuilder sb = new StringBuilder();
 		if (!TFTPUtils.isValid(data)) {
 			return "";
 		}
 		//first 2 bytes are reserved for opcode and end of filename is 0
-		for (int i = 2; i < data.length && data[i] != 0; i++) {
+		return TFTPUtils.bytesToString(data, 2);
+	}
+	
+	public static String getTransferModeString(byte[] data, String filename) {
+		if (!TFTPUtils.isValid(data)) {
+			return "";
+		}
+		//first 2 bytes are reserved for opcode and end of filename is 0
+		return TFTPUtils.bytesToString(data, filename.length() + 3);
+	}
+	
+	public static String bytesToString(byte[] data, int startIndex) {
+		if(data == null || data.length < startIndex) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		//first 2 bytes are reserved for opcode and end of filename is 0
+		for (int i = startIndex; i < data.length && data[i] != 0; i++) {
 			sb.append((char)data[i]);
 		}
 		return sb.toString();
@@ -64,29 +102,6 @@ public class TFTPUtils {
 
 	public static boolean isWriteRequest(byte[] data) {
 		return OPCode.WRQ.equals(getOPCode(data));
-	}
-
-	public static byte[] generateAck(int blockNumber) {
-		return new byte[0];
-	}
-
-	public static byte[] generateDataBlock(byte[] data) {
-		return new byte[0];
-	}
-
-	public static Mode detectTransferMode(byte[] data) {
-		return Mode.NETASCII;
-	}
-
-	public static DatagramPacket generatePacket(byte[] data) {
-		return new DatagramPacket(null, 1);
-	}
-
-	public static byte[] stripHeaders(byte[] data) {
-		if (data != null && data.length > PACKET_MIN_LENGTH) {
-			System.arraycopy(data, 0, data, 0, data.length);
-		}
-		return data;
 	}
 
 }

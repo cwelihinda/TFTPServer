@@ -1,5 +1,7 @@
 import java.net.DatagramPacket;
 
+import utils.TFTPUtils;
+
 public class TFTPHandler implements Runnable{
 	private DatagramPacket initialPacket;
 	public TFTPHandler(DatagramPacket packet) 

@@ -1,5 +1,9 @@
 package utils;
 
 public enum Mode {
-	NETASCII, OCTET;
+	NETASCII("netascii"), OCTET("octet"), MAIL("mail"), UNKNOWN("unknown");
+	String mode;
+	private Mode(String mode) {
+		this.mode = mode;
+	}
 }
