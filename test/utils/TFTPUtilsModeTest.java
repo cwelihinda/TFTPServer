@@ -51,6 +51,13 @@ public class TFTPUtilsModeTest {
 		copyMode("netascii", filename);
 		assertEquals(Mode.NETASCII, TFTPUtils.getMode(packet, filename));
 	}
+	
+	@Test
+	void getMode_shouldReturnUnknown_whenRandomStringSuppliedAndIsWrite() {
+		packet[1] = 2;
+		copyMode("somethingweird", filename);
+		assertEquals(Mode.UNKNOWN, TFTPUtils.getMode(packet, filename));
+	}
 
 	@Test
 	void getMode_shouldReturnOctet_whenOctetSuppliedAndIsWrite() {

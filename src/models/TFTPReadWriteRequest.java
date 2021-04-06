@@ -1,19 +1,22 @@
 package models;
 
 import utils.Mode;
+import utils.TFTPUtils;
 
 public class TFTPReadWriteRequest extends TFTPRequest {
 	String filename;
 	Mode mode;
 	public TFTPReadWriteRequest(byte[] data) {
 		super(data);
-		// TODO Auto-generated constructor stub
+		parseRequest(data);
+		
 	}
 
 	@Override
 	public TFTPRequest parseRequest(byte[] packet) {
-		// TODO Auto-generated method stub
-		return null;
+		filename = TFTPUtils.getFileName(packet);
+		mode = TFTPUtils.getMode(packet, filename);
+		return this;
 	}
 
 }
