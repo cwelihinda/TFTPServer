@@ -2,6 +2,45 @@ package utils;
 
 public class TFTPUtils {
 	private static final int PACKET_MIN_LENGTH = 4;
+	
+	public static ErrorCode getErrorCode(byte[] data) {
+		ErrorCode code = null;
+		if(!TFTPUtils.isValid(data)) {
+			return ErrorCode.INVALID;
+		} else {
+			switch(data[3]) {
+			case 0:
+				code = ErrorCode.UNDEFINED;
+				break;
+			case 1:
+				code = ErrorCode.FILE_NOT_FOUND;
+				break;
+			case 2:
+				code = ErrorCode.ACCESS_VIOLATION;
+				break;
+			case 3:
+				code = ErrorCode.DISK_FULL;
+				break;
+			case 4:
+				code = ErrorCode.ILLEGAL_OP;
+				break;
+			case 5:
+				code = ErrorCode.UNKNOWN_ID;
+				break;
+			case 6:
+				code = ErrorCode.FILE_EXISTS;
+				break;
+			case 7:
+				code = ErrorCode.NO_USER;
+				break;
+			default:
+				code = ErrorCode.INVALID;
+				break;
+			}
+			return code;
+		}
+	}
+	
 	public static OPCode getOPCode(byte[] data) {
 		OPCode code = null;
 		if (!TFTPUtils.isValid(data)) {
@@ -68,6 +107,14 @@ public class TFTPUtils {
 		return true;
 	}
 
+	public static String getErrorMessage(byte[] data) {
+		if (!TFTPUtils.isValid(data)) {
+			return "";
+		}
+		//first 2 bytes are reserved for opcode and end of filename is 0
+		return TFTPUtils.bytesToString(data, 4);
+	}
+	
 	public static String getFileName(byte[] data) {
 		if (!TFTPUtils.isValid(data)) {
 			return "";

@@ -35,7 +35,16 @@ public class TFTPUtilsTest {
 		assertEquals("", TFTPUtils.getFileName(packet));
 	}
 	
+	@Test
+	void getErrorMsg_shouldReturnEmptyString_whenSmallPacketSupplied() {
+		packet = new byte[3];
+		assertEquals("", TFTPUtils.getFileName(packet));
+	}
 	
-	
+	@Test
+	void getErrorMsg_shouldReturnEmptyString_whenSuppliedNull() {
+		packet = null;
+		assertEquals("", TFTPUtils.getFileName(packet));
+	}
 	
 }

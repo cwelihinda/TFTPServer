@@ -1,19 +1,21 @@
 package models;
 
 import utils.ErrorCode;
+import utils.TFTPUtils;
 
 public class TFTPErrorPacket extends TFTPRequest {
 	String errorMsg;
 	ErrorCode errorCode;
 	public TFTPErrorPacket(byte[] data) {
 		super(data);
-		// TODO Auto-generated constructor stub
+		parseRequest(data);
 	}
 
 	@Override
 	public TFTPRequest parseRequest(byte[] packet) {
-		// TODO Auto-generated method stub
-		return null;
+		errorCode = TFTPUtils.getErrorCode(packet);
+		errorMsg = TFTPUtils.getErrorMessage(packet);
+		return this;
 	}
 
 }
