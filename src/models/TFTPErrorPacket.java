@@ -18,4 +18,10 @@ public class TFTPErrorPacket extends TFTPRequest {
 		return this;
 	}
 
+	@Override
+	public byte[] getBytes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

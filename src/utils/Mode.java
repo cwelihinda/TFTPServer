@@ -6,4 +6,12 @@ public enum Mode {
 	private Mode(String mode) {
 		this.mode = mode;
 	}
+	
+	public String getValue() {
+		return this.mode;
+	}
+	
+	public byte[] getByteValue() {
+		return this.mode.getBytes();
+	}
 }

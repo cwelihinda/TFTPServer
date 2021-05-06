@@ -1,11 +1,18 @@
 package models;
 
+import utils.OPCode;
+
 public class TFTPBlockPacket extends TFTPRequest{
 	int blockNumber;
-	byte[] blockBytes;
+	byte[] blockBytes = new byte[2];
 	public TFTPBlockPacket(byte[] data) {
 		super(data);
 		parseRequest(data);
+	}
+	
+	public TFTPBlockPacket(OPCode code, int blockNumber) {
+		super(code);
+		createPacket(code, blockNumber);
 	}
 	
 	
@@ -14,6 +21,15 @@ public class TFTPBlockPacket extends TFTPRequest{
 		blockBytes = new byte[2];
 		System.arraycopy(packet, 2, blockBytes, 0, 2);
 		blockNumber = TFTPBlockPacket.fromByteArray(blockBytes);
+		return this;
+	}
+	
+	public  TFTPBlockPacket createPacket(OPCode code, int blockNumber) {
+		blockBytes = new byte[2];
+		super.opcode = code.getValue();
+		this.blockNumber = blockNumber;
+		byte[] fullBlockBytes = TFTPBlockPacket.toByteArray(blockNumber);
+		System.arraycopy(fullBlockBytes, 2, blockBytes, 0, blockBytes.length);
 		return this;
 	}
 	
@@ -37,5 +53,12 @@ public class TFTPBlockPacket extends TFTPRequest{
 		             ((bytes[1] & 0xFF) << 0 );
 		}
 	 }
+
+	@Override
+	public byte[] getBytes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 }

@@ -8,4 +8,8 @@ public enum OPCode {
 	private OPCode(byte opcode) {
 		this.opcode = opcode;
 	}
+	
+	public byte getValue() {
+		return opcode;
+	}
 }
