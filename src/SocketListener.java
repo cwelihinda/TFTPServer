@@ -18,8 +18,7 @@ public class SocketListener implements Runnable {
 				byte[] buffer = new byte[MAX_BUFFER];
 				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 				serverSocket.receive(packet);
-				new Thread(new TFTPHandler(packet)).run();
-				
+				new Thread(new TFTPHandler(packet)).start();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

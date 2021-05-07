@@ -26,8 +26,6 @@ public class TFTPHandler implements Runnable {
 	private int clientPort;
 	private InetAddress address;
 
-	private FilePacketProvider provider;
-
 	public TFTPHandler(DatagramPacket packet) {
 		this.initialPacket = packet;
 

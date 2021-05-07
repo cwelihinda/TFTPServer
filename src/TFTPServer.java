@@ -7,6 +7,6 @@ public class TFTPServer {
 	
 	
 	public static void startServer() {
-		new Thread(new SocketListener()).run();
+		new Thread(new SocketListener()).start();
 	}
 }
