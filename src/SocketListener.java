@@ -4,7 +4,7 @@ import java.net.DatagramSocket;
 
 public class SocketListener implements Runnable {
 	private static final int PORT = 69;
-	private static final int MAX_BUFFER = 4096;
+	private static final int MAX_BUFFER = 512;
 	
 	public SocketListener() {
 

@@ -60,5 +60,17 @@ public class TFTPBlockPacket extends TFTPRequest{
 		return null;
 	}
 	
+	public int getBlockNumber() {
+		return blockNumber;
+	}
+	
+	@Override
+	public byte[] getData() {
+		byte[] data = new byte[4];
+		data[1] = opcode;
+		System.arraycopy(blockBytes, 0, data, 2, blockBytes.length);
+		return data;
+	}
+	
 	
 }
