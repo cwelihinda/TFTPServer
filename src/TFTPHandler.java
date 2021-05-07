@@ -12,7 +12,9 @@ import java.util.Arrays;
 
 import models.TFTPBlockPacket;
 import models.TFTPDataPacket;
+import models.TFTPErrorPacket;
 import models.TFTPReadWriteRequest;
+import utils.ErrorCode;
 import utils.Mode;
 import utils.OPCode;
 import utils.TFTPUtils;
@@ -45,6 +47,11 @@ public class TFTPHandler implements Runnable {
 		int fileLength = fileData.length;
 		int blockNumber = 1;
 		int filePos = 0;
+		
+		if(fileLength == 0 ) {
+			TFTPErrorPacket error = new TFTPErrorPacket(ErrorCode.FILE_NOT_FOUND);
+			sendDatagram(error);
+		}
 		while (fileLength > filePos) {
 			int bufferSize = getPacketLength(fileLength, filePos);
 			TFTPDataPacket dataPacket = new TFTPDataPacket(fileData, blockNumber, filePos, bufferSize);
@@ -60,6 +67,9 @@ public class TFTPHandler implements Runnable {
 			filePos += bufferSize;
 			blockNumber++;
 		}
+		
+
+		
 	}
 
 	public void doWriteRequest(TFTPReadWriteRequest request) {
@@ -191,6 +201,23 @@ public class TFTPHandler implements Runnable {
 		}
 
 		System.out.println(dataPacket.getFileDataAsString());
+	}
+	
+	public void sendDatagram(TFTPErrorPacket packet) {
+		if (packet == null) {
+			return;
+		}
+		// TODO SEND data packet;
+		System.out.println("Would have sent " + Arrays.toString(packet.getData()));
+
+		DatagramPacket dgPacket = generateDatagram(packet.getData(), address, clientPort);
+
+		try {
+			transferSocket.send(dgPacket);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void sendDatagram(byte[] data) {

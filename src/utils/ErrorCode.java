@@ -9,4 +9,16 @@ public enum ErrorCode {
 		this.code = code;
 		this.msg = msg;
 	}
+	
+	public byte getValue() {
+		return code;
+	}
+	
+	public String getErrorMessage() {
+		return msg;
+	}
+	
+	public byte[] getErrorMessagBytes() {
+		return msg.getBytes();
+	}
 }
